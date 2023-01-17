@@ -1,4 +1,6 @@
 import React from 'react'
+import Image from 'next/image'
+import PageHead from '../../../components/PageHead'
 
 export async function getStaticPaths() {
   const { allEvents } = await import('/data/data.json')
@@ -20,18 +22,25 @@ export async function getStaticPaths() {
 export async function getStaticProps(context) {
   const id = context.params.event
   const { allEvents } = await import('/data/data.json')
-  const eventData = allEvents.filter(event => id === event.id)
+  const eventData = allEvents.find(event => id === event.id)
 
   return {
     props: {
-      data: eventData[0],
+      data: eventData,
     },
   }
 }
 
 const EventPage = ({data}) => {
   return (
-    <h1>{data.title}</h1>
+    <>
+      <PageHead pageTitle={data.title} />
+      <article className='page__section'>
+        <Image src={data.image} width={500} height={500} alt={data.title} />
+        <h1>{data.title}</h1>
+        <p>{data.description}</p>
+      </article>
+    </>
   )
 }
 

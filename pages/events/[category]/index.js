@@ -1,6 +1,6 @@
 import React from 'react'
-import Image from 'next/image'
-import Link from 'next/link'
+import PageHead from '../../../components/PageHead'
+import EventItem from '../../../components/EventItem'
 
 export async function getStaticPaths() {
   const { events_categories } = await import('/data/data.json')
@@ -33,19 +33,26 @@ export async function getStaticProps(context) {
 
 const EventCategoryPage = ({events, categoryName}) => {
   return (
-    <section>
-      <h1>Page for all events in {categoryName}</h1>
-      <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nesciunt rerum aliquid aperiam est officia provident, incidunt accusantium ipsa voluptatem, suscipit expedita placeat. Dignissimos tenetur molestias fugit laborum, veritatis quis tempore?</p>
-      {events.map(event => (
-        <Link key={event.id} href={`/events/${event.city}/${event.id}`} passHref legacyBehavior>
-          <a>
-            <Image src={event.image} alt={event.title} width={200} height={200} />
-            <h2>{event.title}</h2>
-            <p><em>{event.description}</em></p>
-          </a>
-        </Link>
-      ))}
-    </section>
+    <>
+      <PageHead />
+      <section className='page__section'>
+        <h1>Page for all events ({events.length}) in {categoryName}</h1>
+        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nesciunt rerum aliquid aperiam est officia provident, incidunt accusantium ipsa voluptatem, suscipit expedita placeat. Dignissimos tenetur molestias fugit laborum, veritatis quis tempore?</p>
+        
+        <div className='event__list'>
+          {events.map(event => (
+            <EventItem
+              key={event.id}
+              id={event.id}
+              linkHref={`/events/${event.city}/${event.id}`}
+              title={event.title}
+              image={event.image}
+              description={event.description}
+            />
+          ))}
+        </div>
+      </section>
+    </>
   )
 }
 
