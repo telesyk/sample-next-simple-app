@@ -1,11 +1,22 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Image from 'next/image'
 
+const captions = {
+  form: {
+    label: 'Please, register for this event',
+    button: 'Submit',
+  }
+}
+
 function SingleEvent({image, title, description}) {
-  const handleSubmit = (e) => {
+  const [value, setValue] = useState('');
+
+  const onChange = (e) => setValue(e.target.value)
+
+  const onSubmit = (e) => {
     e.preventDefault();
-    console.log(e);
-  };
+    console.log(value);
+  }
 
   return (
     <article className='single-event'>
@@ -13,10 +24,17 @@ function SingleEvent({image, title, description}) {
       <Image className='single-event__image' src={image} width={500} height={500} alt={title} />
       <p className='single-event__description'>{description}</p>
       
-      <form onSubmit={handleSubmit} className="single-event__registration">
-        <label className="single-event__registration-label" htmlFor="emailRegistration">Register for this event</label>
-        <input className="single-event__registration-field" type="email" id='emailRegistration' placeholder="email@sample" />
-        <button className="single-event__registration-button" type='submit'>Register</button>
+      <form onSubmit={onSubmit} className="single-event__registration">
+        <label className="single-event__registration-label" htmlFor="emailRegistration">{captions.form.label}</label>
+        <input
+          className="single-event__registration-field"
+          type="email"
+          id='emailRegistration'
+          placeholder="email@sample"
+          value={value}
+          onChange={onChange}
+        />
+        <button className="single-event__registration-button" type='submit'>{captions.form.button}</button>
       </form>
     </article>
   )
