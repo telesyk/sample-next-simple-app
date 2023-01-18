@@ -36,7 +36,7 @@ const EventCategoryPage = ({events, categoryName}) => {
     <>
       <PageHead />
       <section className='page__section'>
-        <h1>Page for all events ({events.length}) in {categoryName}</h1>
+        <h1 className='page__title'>Page for all events ({events.length}) in {categoryName}</h1>
         <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nesciunt rerum aliquid aperiam est officia provident, incidunt accusantium ipsa voluptatem, suscipit expedita placeat. Dignissimos tenetur molestias fugit laborum, veritatis quis tempore?</p>
         
         <div className='event__list'>

@@ -1,6 +1,7 @@
 import React from 'react'
 import Image from 'next/image'
 import PageHead from '../../../components/PageHead'
+import SingleEvent from '../../../components/SingleEvent'
 
 export async function getStaticPaths() {
   const { allEvents } = await import('/data/data.json')
@@ -35,11 +36,13 @@ const EventPage = ({data}) => {
   return (
     <>
       <PageHead pageTitle={data.title} />
-      <article className='page__section'>
-        <Image src={data.image} width={500} height={500} alt={data.title} />
-        <h1>{data.title}</h1>
-        <p>{data.description}</p>
-      </article>
+      <section className="page__section">
+        <SingleEvent
+          image={data.image}
+          title={data.title}
+          description={data.description}
+        />
+      </section>
     </>
   )
 }
