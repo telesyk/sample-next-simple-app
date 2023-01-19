@@ -1,17 +1,15 @@
-import React from 'react'
-import Header from '../components/Header'
-import Footer from '../components/Footer'
+import React from 'react';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 
-function Layout({children}) {
+function Layout({ children }) {
   return (
-    <div className='page'>
+    <div className="page">
       <Header />
-      <main  className='main'>
-        {children}
-      </main>
+      <main className="main">{children}</main>
       <Footer />
     </div>
-  )
+  );
 }
 
-export default Layout
+export default Layout;

@@ -1,38 +1,37 @@
-import React from 'react'
-import Image from 'next/image'
-import PageHead from '../../../components/PageHead'
-import SingleEvent from '../../../components/SingleEvent'
+import React from 'react';
+import PageHead from '../../../components/PageHead';
+import SingleEvent from '../../../components/SingleEvent';
 
 export async function getStaticPaths() {
-  const { allEvents } = await import('/data/data.json')
-  const allPaths = allEvents.map(path => {
+  const { all_events } = await import('/data/data.json');
+  const allPaths = all_events.map(path => {
     return {
       params: {
         event: path.id,
         category: path.city,
-      }
-    }
-  })
+      },
+    };
+  });
 
   return {
     paths: allPaths,
     fallback: false,
-  }
+  };
 }
 
 export async function getStaticProps(context) {
-  const id = context.params.event
-  const { allEvents } = await import('/data/data.json')
-  const eventData = allEvents.find(event => id === event.id)
+  const id = context.params.event;
+  const { all_events } = await import('/data/data.json');
+  const eventData = all_events.find(event => id === event.id);
 
   return {
     props: {
       data: eventData,
     },
-  }
+  };
 }
 
-const EventPage = ({data}) => {
+const EventPage = ({ data }) => {
   return (
     <>
       <PageHead pageTitle={data.title} />
@@ -44,7 +43,7 @@ const EventPage = ({data}) => {
         />
       </section>
     </>
-  )
-}
+  );
+};
 
-export default EventPage
+export default EventPage;
