@@ -6,9 +6,9 @@ function Footer() {
     <footer className="footer">
       <Image
         className="footer__logo"
-        src="/vercel.svg"
-        width={100}
-        height={50}
+        src="/next.svg"
+        width={60}
+        height={13}
         alt={'Footer logo'}
       />
       <p className="footer__copyright">Copyright c 2023</p>

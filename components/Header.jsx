@@ -10,8 +10,8 @@ function Header() {
           className="header__logo"
           src="/next.svg"
           alt="Next.js Logo"
-          width={100}
-          height={20}
+          width={60}
+          height={13}
           priority
         />
         <div className="header__menu" role="menubar">

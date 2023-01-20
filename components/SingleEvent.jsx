@@ -15,10 +15,18 @@ function SingleEvent({ image, title, description }) {
   const onSubmit = async e => {
     e.preventDefault();
     const eventValue = router?.query.event;
+    const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
     if (!emailValue)
       return setNotification({
         message: MESSAGES.error.emailEmpty,
+        icon: <IconBell />,
+        className: 'notification-warning',
+      });
+
+    if (!emailValue.match(emailRegex))
+      return setNotification({
+        message: MESSAGES.error.emailInvalid,
         icon: <IconBell />,
         className: 'notification-warning',
       });
@@ -32,25 +40,17 @@ function SingleEvent({ image, title, description }) {
         body: JSON.stringify({ email: emailValue, eventId: eventValue }),
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        let errorMessage = '';
-
-        if (response.status === 409) {
-          errorMessage = `${response.statusText}: ${MESSAGES.error.emailRegistered}.`;
-        } else {
-          errorMessage = `Code ${response.status}, ${response.statusText}`;
-        }
-
         setNotification({
-          message: errorMessage,
+          message: `${response.statusText}: ${data.message}`,
           icon: <IconSettings />,
           className: 'notification-error',
         });
 
         throw new Error(`${response.statusText} [${response.status}]`);
       }
-
-      const data = await response.json();
 
       setNotification({
         message: data.message,
