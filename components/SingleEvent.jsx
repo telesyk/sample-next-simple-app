@@ -12,6 +12,11 @@ function SingleEvent({ image, title, description }) {
 
   const onChange = e => setEmailValue(e.target.value);
 
+  const handleNotificationClose = e => {
+    e.preventDefault();
+    setNotification(null);
+  };
+
   const onSubmit = async e => {
     e.preventDefault();
     const eventValue = router?.query.event;
@@ -57,6 +62,8 @@ function SingleEvent({ image, title, description }) {
         icon: <IconChat />,
         className: 'notification-info',
       });
+
+      setEmailValue('');
     } catch (error) {
       console.error(error);
     }
@@ -98,7 +105,7 @@ function SingleEvent({ image, title, description }) {
           message={notification.message}
           icon={notification.icon}
           classNames={notification.className}
-          onClose={Function.prototype}
+          onClose={handleNotificationClose}
         />
       )}
     </article>
