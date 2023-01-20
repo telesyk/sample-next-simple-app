@@ -1,23 +1,27 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-
-const captions = {
-  form: {
-    label: 'Please, register for this event',
-    button: 'Submit',
-  },
-};
+import Notification from './Notification';
+import { IconChat, IconBell, IconSettings } from './icon';
+import { MESSAGES } from '../constants';
 
 function SingleEvent({ image, title, description }) {
-  const [value, setValue] = useState('');
+  const [emailValue, setEmailValue] = useState('');
+  const [notification, setNotification] = useState(null);
   const router = useRouter();
 
-  const onChange = e => setValue(e.target.value);
+  const onChange = e => setEmailValue(e.target.value);
 
   const onSubmit = async e => {
     e.preventDefault();
     const eventValue = router?.query.event;
+
+    if (!emailValue)
+      return setNotification({
+        message: MESSAGES.error.emailEmpty,
+        icon: <IconBell />,
+        className: 'notification-warning',
+      });
 
     try {
       const response = await fetch('/api/email-registration', {
@@ -25,14 +29,36 @@ function SingleEvent({ image, title, description }) {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email: value, event: eventValue }),
+        body: JSON.stringify({ email: emailValue, eventId: eventValue }),
       });
 
-      if (!response.ok) throw new Error(`Error: ${response.status}`);
+      if (!response.ok) {
+        let errorMessage = '';
+
+        if (response.status === 409) {
+          errorMessage = `${response.statusText}: ${MESSAGES.error.emailRegistered}.`;
+        } else {
+          errorMessage = `Code ${response.status}, ${response.statusText}`;
+        }
+
+        setNotification({
+          message: errorMessage,
+          icon: <IconSettings />,
+          className: 'notification-error',
+        });
+
+        throw new Error(`${response.statusText} [${response.status}]`);
+      }
 
       const data = await response.json();
+
+      setNotification({
+        message: data.message,
+        icon: <IconChat />,
+        className: 'notification-info',
+      });
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -53,20 +79,28 @@ function SingleEvent({ image, title, description }) {
           className="single-event__registration-label"
           htmlFor="emailRegistration"
         >
-          {captions.form.label}
+          {MESSAGES.info.form.label}
         </label>
         <input
           className="single-event__registration-field"
           type="email"
           id="emailRegistration"
           placeholder="email@sample"
-          value={value}
+          value={emailValue}
           onChange={onChange}
         />
         <button className="single-event__registration-button" type="submit">
-          {captions.form.button}
+          {MESSAGES.info.form.button}
         </button>
       </form>
+      {notification && (
+        <Notification
+          message={notification.message}
+          icon={notification.icon}
+          classNames={notification.className}
+          onClose={Function.prototype}
+        />
+      )}
     </article>
   );
 }
