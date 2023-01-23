@@ -40,6 +40,7 @@ const EventPage = ({ data }) => {
           image={data.image}
           title={data.title}
           description={data.description}
+          emails={data.emails_registered}
         />
       </section>
     </>

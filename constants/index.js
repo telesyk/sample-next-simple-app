@@ -13,7 +13,13 @@ const MESSAGES = {
       label: 'Please, register for this event',
       button: 'Submit',
     },
+    slotsLeft: 'Left slots for registration',
+    slotsEnd: 'All slots for registration ended',
   },
 };
 
-export { MESSAGES };
+const LIMITS = {
+  emailsPerEvent: 10,
+};
+
+export { MESSAGES, LIMITS };

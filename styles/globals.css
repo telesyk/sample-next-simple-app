@@ -142,7 +142,7 @@
   }
 
   .notification {
-    @apply my-4 p-4 rounded border-2 relative;
+    @apply p-4 rounded border-2 fixed right-4 bottom-8 z-10;
   }
 
   .notification-warning {

@@ -3,12 +3,14 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import Notification from './Notification';
 import { IconChat, IconBell, IconSettings } from './icon';
-import { MESSAGES } from '../constants';
+import { MESSAGES, LIMITS } from '../constants';
 
-function SingleEvent({ image, title, description }) {
+function SingleEvent({ image, title, description, emails }) {
   const [emailValue, setEmailValue] = useState('');
   const [notification, setNotification] = useState(null);
   const router = useRouter();
+
+  const emailsLeft = LIMITS.emailsPerEvent - emails.length;
 
   const onChange = e => setEmailValue(e.target.value);
 
@@ -86,19 +88,29 @@ function SingleEvent({ image, title, description }) {
           className="single-event__registration-label"
           htmlFor="emailRegistration"
         >
-          {MESSAGES.info.form.label}
+          {emailsLeft > 0 && MESSAGES.info.form.label}
+          <br />
+          {emailsLeft > 0 ? (
+            <small>{`${MESSAGES.info.slotsLeft}: ${emailsLeft} of 10`}</small>
+          ) : (
+            <small>{MESSAGES.info.slotsEnd}</small>
+          )}
         </label>
-        <input
-          className="single-event__registration-field"
-          type="email"
-          id="emailRegistration"
-          placeholder="email@sample"
-          value={emailValue}
-          onChange={onChange}
-        />
-        <button className="single-event__registration-button" type="submit">
-          {MESSAGES.info.form.button}
-        </button>
+        {emailsLeft > 0 && (
+          <>
+            <input
+              className="single-event__registration-field"
+              type="email"
+              id="emailRegistration"
+              placeholder="email@sample"
+              value={emailValue}
+              onChange={onChange}
+            />
+            <button className="single-event__registration-button" type="submit">
+              {MESSAGES.info.form.button}
+            </button>
+          </>
+        )}
       </form>
       {notification && (
         <Notification
